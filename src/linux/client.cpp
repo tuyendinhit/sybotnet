@@ -67,7 +67,7 @@ int main()
     sockaddr_in addr{0};
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    addr.sin_port = 80;
+    addr.sin_port = htons(7677);
 
     sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     connect(sock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
