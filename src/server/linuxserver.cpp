@@ -1,3 +1,5 @@
+/* Linux Only */
+
 #include<iostream>
 #include<unistd.h>
 #include<algorithm>
