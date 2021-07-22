@@ -74,7 +74,6 @@ int main()
 
     client_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     connect(client_socket, reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
-    std::cout << " connect " << std::endl;
 
     while(true)
     {
