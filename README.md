@@ -4,7 +4,14 @@
 
 SyBotnet is very simple
 
+# What is botnet?
+CnC Server for DDos Attack
+
 # Usage
 ```
 git clone https://github.com/seungyup26/sybotnet
 ```
+
+<br>
+
+**Made for education**
