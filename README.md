@@ -9,6 +9,8 @@ SyBotnet is very simple
 CnC Server for DDos Attack
 
 # Usage
+1. Git clone
+2. Add SyOKet Library
 ```
 git clone https://github.com/seungyup26/sybotnet
 ```
