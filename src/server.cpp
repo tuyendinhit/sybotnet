@@ -108,6 +108,7 @@ int main()
 		std::transform(command_string.begin(), command_string.end(), command_string.begin(), tolower);
 
 		std::vector<std::string> result = split(command_string, ' ');
+
 		strcpy(data.command, result[0].c_str());
 
 		std::cout << '\n';
@@ -120,7 +121,8 @@ int main()
 		{
 			for (int i = 0; i < result.size(); i++)
 			{
-				if (result[i] == "-i" || result[i] == "--id") {
+				if (result[i] == "-i" || result[i] == "--id")
+				{
 
 					if (atoi(result[i + 1].c_str()) < result.size()) {
 						tcp.Send(reinterpret_cast<char*>(&data), sizeof(Data), atoi(result[i + 1].c_str()));
@@ -174,8 +176,7 @@ int main()
 					strcpy(data.ip, result[(argc + 1)].c_str());
 				}
 
-				else if (result[argc] == "-p" || result[argc] == "--port"
-					|| result[argc] == "--packet" || result[argc] == "--protocol")
+				else if (result[argc] == "-p" || result[argc] == "--port" || result[argc] == "--packet" || result[argc] == "--protocol")
 				{
 					if (check_number(result[(argc + 1)]) == true) {
 						data.port = atoi(result[(argc + 1)].c_str());
@@ -261,13 +262,16 @@ int main()
 				if (result[i] == "-t" || result[i] == "--text") {
 					strcpy(data.first_option, result[(i + 1)].c_str());
 				}
+
 				else if (result[i] == "-c" || result[i] == "--caption") {
 					strcpy(data.second_option, result[(i + 1)].c_str());
 				}
+
 				else if (result[i] == "-i" || result[i] == "--id") {
 					is_id = true;
 					id = atoi(result[i + 1].c_str());
 				}
+
 				else if (result[i] == "--id--all") {
 					is_id = false;
 				}
