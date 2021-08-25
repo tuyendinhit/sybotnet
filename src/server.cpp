@@ -180,11 +180,14 @@ int main()
 					if (check_number(result[(argc + 1)]) == true) {
 						data.port = atoi(result[(argc + 1)].c_str());
 					}
-					else if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp") {
-						strcpy(data.proto, result[(argc + 1)].c_str());
-					}
-					else {
-						strcpy(data.packet, result[(argc + 1)].c_str());
+					else 
+					{
+						if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp") {
+							strcpy(data.proto, result[(argc + 1)].c_str());
+						}
+						else {
+							strcpy(data.packet, result[(argc + 1)].c_str());
+						}
 					}
 				}
 
@@ -219,11 +222,14 @@ int main()
 					if (check_number(result[(argc + 1)]) == true) {
 						data.port = atoi(result[(argc + 1)].c_str());
 					}
-					else if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp" || result[(argc + 1)] == "--protocol") {
-						strcpy(data.proto, result[(argc + 1)].c_str());
-					}
-					else {
-						strcpy(data.packet, result[(argc + 1)].c_str());
+					else
+					{
+						if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp") {
+							strcpy(data.proto, result[(argc + 1)].c_str());
+						}
+						else {
+							strcpy(data.packet, result[(argc + 1)].c_str());
+						}
 					}
 				}
 
