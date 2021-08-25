@@ -10,7 +10,7 @@ CnC Server for DDos Attack
 
 # Usage
 1. Git clone
-2. Add SyOKet Library
+2. Add SyOKet Library v2021.8.24
 ```
 git clone https://github.com/seungyup26/sybotnet
 ```
