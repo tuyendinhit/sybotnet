@@ -18,6 +18,8 @@ TCPSocket tcp = TCPSocket("127.0.0.1", 2626);
 
 int main()
 {
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+
 	while (tcp.Connect() == E_CONNECT) std::this_thread::sleep_for(seconds(1));
 
 	while (true)
