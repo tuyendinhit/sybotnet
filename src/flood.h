@@ -12,14 +12,18 @@
 
 struct Data
 {
-	char command[16];
 	int  port;
 	int  delay;
 	int  thread;
 	int  time;
+
+	char command[16];
 	char ip[16];
 	char packet[1024];
 	char proto[8];
+
+	char first_option[128];
+	char second_option[128];
 };
 
 void flood(Data data);
