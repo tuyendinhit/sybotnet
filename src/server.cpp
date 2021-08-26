@@ -82,6 +82,12 @@ std::vector<std::string> split(const std::string& target, char split)
 
 int main()
 {
+	HWND console = GetConsoleWindow();
+
+	RECT ConsoleRect;
+	GetWindowRect(console, &ConsoleRect);
+
+	MoveWindow(console, ConsoleRect.left, ConsoleRect.top, 900, 660, true);
 	
 	SetConsoleTitleW(L"SyBotnet");
 
