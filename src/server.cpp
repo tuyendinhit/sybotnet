@@ -14,6 +14,7 @@
 #include<cctype>
 #include<vector>
 #include<sstream>
+#include<chrono>
 #include<algorithm>
 
 void print_help()
@@ -131,13 +132,12 @@ int main()
 				{
 					if (result[i] == "-i" || result[i] == "--id")
 					{
-
 						if (atoi(result[(i + 1)].c_str()) < result.size()) {
 							tcp.Send(reinterpret_cast<char*>(&data), sizeof(Data), atoi(result[(i + 1)].c_str()));
 							break;
 						}
 					}
-					else if (result[i] == "-a" || result[i] == "--all")
+					else if (result[i] == "--id--all")
 					{
 						for (int id = 0; id < tcp.GetTotalAccept(); id++) {
 							tcp.Send(reinterpret_cast<char*>(&data), sizeof(Data), id);
