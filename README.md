@@ -14,4 +14,4 @@ git clone https://github.com/seungyup26/sybotnet
 
 <br>
 
-**This is for education**
+** Made by seungyup26, for education **
