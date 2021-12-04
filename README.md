@@ -12,6 +12,8 @@
 git clone https://github.com/seungyup26/sybotnet
 ```
 
+# Library
+https://github.com/seungyup26/sybotnet-api
 <br>
 
 **Made by seungyup26, for education**
